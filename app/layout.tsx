@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
 import { Nunito } from "next/font/google";
+import { AuthProvider } from "@/lib/auth-context";
+import Navbar from "@/app/components/navbar";
+import LoginModal from "@/app/components/login-modal";
+import SignupModal from "@/app/components/signup-modal";
+import Footer from "@/app/components/footer";
 import "./globals.css";
 
 const nunito = Nunito({
@@ -19,9 +24,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className={nunito.variable}>
+    <html lang="en" className={nunito.variable}>
       <body className="antialiased">
-        {children}
+        <AuthProvider>
+          <Navbar />
+          <LoginModal />
+          <SignupModal />
+
+          <main>{children}</main>
+
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
