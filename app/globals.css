@@ -445,6 +445,13 @@ button.secondary:hover {
   color: #000000;
 }
 
+/* Threads logo image styling */
+.threads-logo {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
 .footer-copyright {
   text-align: center;
   padding-top: 1.5rem;
@@ -554,6 +561,11 @@ button.secondary:hover {
   }
 
   .social-link svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .threads-logo {
     width: 20px;
     height: 20px;
   }
