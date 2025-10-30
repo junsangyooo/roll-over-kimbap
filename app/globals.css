@@ -378,7 +378,7 @@ button.secondary:hover {
 .footer-section {
   background-color: var(--primary);
   color: var(--text-on-primary);
-  padding: 3rem 2rem;
+  padding: 2rem 2rem;
   margin-top: 4rem;
 }
 
@@ -460,7 +460,7 @@ button.secondary:hover {
 }
 
 .footer-copyright p {
-  margin: 0;
+  margin: 0 0 1.5rem 0;
   font-size: 0.9rem;
   color: var(--text-on-primary);
 }
@@ -572,6 +572,7 @@ button.secondary:hover {
 
   .footer-copyright p {
     font-size: 0.8rem;
+    margin-bottom: 1.5rem;
   }
 }
 
