@@ -70,7 +70,8 @@ h3 {
 .body_large {
   font-family: "Nunito", sans-serif;
   font-size: 22px;
-  line-height: 1.4;
+  line-height: 1.6;
+  font-weight: 600;
   color: var(--text-on-background); 
   align-items: left;
 }
@@ -78,14 +79,15 @@ h3 {
 .body_medium {
   font-family: "Nunito", sans-serif;
   font-size: 20px;
-  line-height: 1.4;
+  line-height: 1.5;
+  font-weight: 600;
   color: var(--text-on-background); 
 }
 
 p {
   font-family: "Nunito", sans-serif;
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: 16px;
+  line-height: 1.5;
   color: var(--text-secondary);
 }
 
@@ -956,7 +958,7 @@ button.secondary:hover {
 /* Introduction Section */
 .introduction-section {
   background: var(--background);
-  padding: 8rem 0 4rem 0;
+  padding: 6rem 0 8rem 0;
   border-bottom: 1px solid var(--primary);
 }
 
@@ -969,11 +971,12 @@ button.secondary:hover {
 .service-section {
   background: var(--background);
   padding: 4rem 0;
+  text-align: center;
 }
 
 .service-content {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 3rem;
   align-items: start;
 }
@@ -981,13 +984,17 @@ button.secondary:hover {
 .service-text {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
 }
 
-.service-text p {
+.service-text p:not(.body_medium) {
   font-size: 1.05rem;
   line-height: 1.7;
   color: #555;
+}
+
+.service-text .body_medium {
+  font-weight: 600;
+  color: var(--text-on-background);
 }
 
 .service-info {
