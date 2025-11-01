@@ -986,13 +986,14 @@ button.secondary:hover {
   flex-direction: column;
 }
 
-.service-text p:not(.body_medium) {
+.service-text p {
   font-size: 1.05rem;
   line-height: 1.7;
   color: #555;
 }
 
 .service-text .body_medium {
+  font-size: 20px;
   font-weight: 600;
   color: var(--text-on-background);
 }
