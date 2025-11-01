@@ -67,8 +67,23 @@ h3 {
   font-weight: 400;
 }
 
+.body_large {
+  font-family: "Nunito", sans-serif;
+  font-size: 22px;
+  line-height: 1.4;
+  color: var(--text-on-background); 
+  align-items: left;
+}
+
+.body_medium {
+  font-family: "Nunito", sans-serif;
+  font-size: 20px;
+  line-height: 1.4;
+  color: var(--text-on-background); 
+}
+
 p {
-  font-family: "gigalypse", sans-serif;
+  font-family: "Nunito", sans-serif;
   font-size: 1rem;
   line-height: 1.6;
   color: var(--text-secondary);
@@ -84,6 +99,7 @@ a {
 a:hover {
   color: var(--accent);
 }
+
 
 /* 버튼 스타일 */
 button {
@@ -561,13 +577,13 @@ button.secondary:hover {
   }
 
   .social-link svg {
-    width: 20px;
-    height: 20px;
+    width: 32px;
+    height: 32px;
   }
 
   .threads-logo {
-    width: 20px;
-    height: 20px;
+    width: 48px;
+    height: 48px;
   }
 
   .footer-copyright p {
@@ -843,7 +859,8 @@ button.secondary:hover {
 }
 
 .btn-primary:hover {
-  background-color: #e55a0f;
+  background-color: var(--accent);
+  color: var(--primary);
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(252, 98, 21, 0.3);
 }
@@ -936,32 +953,44 @@ button.secondary:hover {
   font-size: 1.2rem;
 }
 
-/* About Section */
-.about-section {
+/* Introduction Section */
+.introduction-section {
+  background: var(--background);
+  padding: 8rem 0 4rem 0;
+  border-bottom: 1px solid var(--primary);
+}
+
+.introduction-content {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+/* Service Section */
+.service-section {
   background: var(--background);
   padding: 4rem 0;
 }
 
-.about-content {
+.service-content {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: start;
 }
 
-.about-text {
+.service-text {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.about-text p {
+.service-text p {
   font-size: 1.05rem;
   line-height: 1.7;
   color: #555;
 }
 
-.about-info {
+.service-info {
   display: flex;
   flex-direction: column;
   gap: 2rem;

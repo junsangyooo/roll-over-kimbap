@@ -1,0 +1,272 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { useAuth } from '@/lib/auth-context'
+
+export default function SignupModal() {
+  const [isOpen, setIsOpen] = useState(false)
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [phoneNumber, setPhoneNumber] = useState('')
+  const [zipCode, setZipCode] = useState('')
+  const [emailSubscribe, setEmailSubscribe] = useState(false)
+  const [smsSubscribe, setSmsSubscribe] = useState(false)
+  const [termsAgreed, setTermsAgreed] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
+  const [loading, setLoading] = useState(false)
+  const { signUp } = useAuth()
+
+  useEffect(() => {
+    const handleOpenModal = () => setIsOpen(true)
+    window.addEventListener('openSignupModal', handleOpenModal)
+    return () => window.removeEventListener('openSignupModal', handleOpenModal)
+  }, [])
+
+  // 모달이 열렸을 때 body 스크롤 방지
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset'
+    }
+  }, [isOpen])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setError('')
+    setSuccess('')
+    setLoading(true)
+
+    // Validation
+    if (password !== confirmPassword) {
+      setError('Passwords do not match')
+      setLoading(false)
+      return
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters')
+      setLoading(false)
+      return
+    }
+
+    if (!termsAgreed) {
+      setError('You must agree to the terms and conditions')
+      setLoading(false)
+      return
+    }
+
+    try {
+      await signUp(email, password)
+      setSuccess('Account created successfully! Please log in.')
+      setTimeout(() => {
+        setIsOpen(false)
+        // Reset form
+        setFirstName('')
+        setLastName('')
+        setEmail('')
+        setPassword('')
+        setConfirmPassword('')
+        setPhoneNumber('')
+        setZipCode('')
+        setEmailSubscribe(false)
+        setSmsSubscribe(false)
+        setTermsAgreed(false)
+        setSuccess('')
+      }, 2000)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Sign up failed')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (!isOpen) return null
+
+  const handleBackdropClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      setIsOpen(false)
+    }
+  }
+
+  return (
+    <>
+      {/* Backdrop */}
+      <div className="modal-backdrop" onClick={handleBackdropClick}></div>
+
+      {/* Modal */}
+      <div className="modal-overlay" onClick={handleBackdropClick}>
+        <div className="modal-card modal-card-large" onClick={(e) => e.stopPropagation()}>
+          <div className="modal-header">
+            <h2>Create Account</h2>
+            <button
+              className="modal-close-btn"
+              onClick={() => setIsOpen(false)}
+              aria-label="Close"
+            >
+              ×
+            </button>
+          </div>
+
+          <form onSubmit={handleSubmit} className="auth-form">
+            {error && <div className="error-message">{error}</div>}
+            {success && <div className="success-message">{success}</div>}
+
+            {/* Name Fields */}
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="firstName">First Name</label>
+                <input
+                  id="firstName"
+                  type="text"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  placeholder="John"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="lastName">Last Name</label>
+                <input
+                  id="lastName"
+                  type="text"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  placeholder="Doe"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="form-group">
+              <label htmlFor="email">Email</label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@example.com"
+                required
+              />
+            </div>
+
+            {/* Password Fields */}
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="password">Password</label>
+                <input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="••••••"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="confirmPassword">Confirm Password</label>
+                <input
+                  id="confirmPassword"
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  placeholder="••••••"
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Phone & Zip */}
+            <div className="form-row">
+              <div className="form-group">
+                <label htmlFor="phone">Phone Number (Optional)</label>
+                <input
+                  id="phone"
+                  type="tel"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  placeholder="(555) 123-4567"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="zip">Zip Code (Optional)</label>
+                <input
+                  id="zip"
+                  type="text"
+                  value={zipCode}
+                  onChange={(e) => setZipCode(e.target.value)}
+                  placeholder="10001"
+                />
+              </div>
+            </div>
+
+            {/* Subscriptions */}
+            <div className="form-group checkbox-group">
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={emailSubscribe}
+                  onChange={(e) => setEmailSubscribe(e.target.checked)}
+                />
+                <span>Subscribe to email promotions</span>
+              </label>
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={smsSubscribe}
+                  onChange={(e) => setSmsSubscribe(e.target.checked)}
+                />
+                <span>Subscribe to SMS promotions</span>
+              </label>
+            </div>
+
+            {/* Terms */}
+            <div className="form-group checkbox-group">
+              <label className="checkbox-label">
+                <input
+                  type="checkbox"
+                  checked={termsAgreed}
+                  onChange={(e) => setTermsAgreed(e.target.checked)}
+                  required
+                />
+                <span>I agree to the Terms and Conditions</span>
+              </label>
+            </div>
+
+            <button type="submit" className="submit-button" disabled={loading}>
+              {loading ? 'Creating Account...' : 'Create Account'}
+            </button>
+          </form>
+
+          <div className="modal-footer">
+            <p>
+              Already have an account?{' '}
+              <button
+                type="button"
+                className="modal-link-btn"
+                onClick={() => {
+                  setIsOpen(false)
+                  setTimeout(() => {
+                    const event = new CustomEvent('openLoginModal')
+                    window.dispatchEvent(event)
+                  }, 300)
+                }}
+              >
+                Log in
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
