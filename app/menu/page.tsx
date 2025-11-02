@@ -11,33 +11,43 @@ interface MenuItem {
   price: number
   category: string
   image_url?: string
-  tags?: string[]
+  tags?: string[] // DB에서 jsonb 로 올 거면 여기 나중에 타입 한 번 더 확인
 }
 
 export default function Menu() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([])
   const [categories, setCategories] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
+  const [fetchError, setFetchError] = useState<string | null>(null)
 
   useEffect(() => {
     const fetchMenuItems = async () => {
+      // 💡 supabase가 null이면 바로 종료
+      if (!supabase) {
+        console.error('Supabase client is not initialized.')
+        setFetchError('Menu service is temporarily unavailable.')
+        setLoading(false)
+        return
+      }
+
       try {
         const { data, error } = await supabase
           .from('menu_items')
           .select('*')
           .order('category', { ascending: true })
 
-        if (error) throw error 
+        if (error) throw error
 
         setMenuItems(data || [])
 
-        // Extract unique categories
+        // extract unique categories
         const uniqueCategories = Array.from(
           new Set((data || []).map((item) => item.category))
         ) as string[]
         setCategories(uniqueCategories)
       } catch (err) {
         console.error('Failed to fetch menu items:', err)
+        setFetchError('Failed to load menu items.')
       } finally {
         setLoading(false)
       }
@@ -45,7 +55,6 @@ export default function Menu() {
 
     fetchMenuItems()
   }, [])
-
 
   return (
     <div className="menu-page">
@@ -60,9 +69,10 @@ export default function Menu() {
       <section className="menu-content">
         {loading ? (
           <div className="loading">Loading menu...</div>
+        ) : fetchError ? (
+          <div className="error-message">{fetchError}</div>
         ) : categories.length > 0 ? (
           <>
-            {/* Category Sections */}
             {categories.map((category) => {
               const categoryItems = menuItems.filter(
                 (item) => item.category === category
@@ -70,12 +80,10 @@ export default function Menu() {
               return (
                 <div key={category} className="menu-category-section">
                   <div className="section-container">
-                    {/* Category Title with Divider */}
                     <div className="category-header">
                       <h2>{category}</h2>
                     </div>
 
-                    {/* Menu Items Grid */}
                     {categoryItems.length > 0 ? (
                       <div className="menu-grid">
                         {categoryItems.map((item) => (
@@ -87,7 +95,9 @@ export default function Menu() {
                             )}
                             <div className="menu-card-content">
                               <div className="menu-card-header">
-                                <h3 className="menu-card-title">{item.name}</h3>
+                                <h3 className="menu-card-title">
+                                  {item.name}
+                                </h3>
                                 <p className="menu-card-price">
                                   ${item.price.toFixed(2)}
                                 </p>
