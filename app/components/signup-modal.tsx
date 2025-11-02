@@ -46,6 +46,30 @@ export default function SignupModal() {
     setLoading(true)
 
     // Validation
+    if (!firstName.trim()) {
+      setError('First name is required')
+      setLoading(false)
+      return
+    }
+
+    if (!lastName.trim()) {
+      setError('Last name is required')
+      setLoading(false)
+      return
+    }
+
+    if (!email.trim()) {
+      setError('Email is required')
+      setLoading(false)
+      return
+    }
+
+    if (!password) {
+      setError('Password is required')
+      setLoading(false)
+      return
+    }
+
     if (password !== confirmPassword) {
       setError('Passwords do not match')
       setLoading(false)
@@ -54,6 +78,12 @@ export default function SignupModal() {
 
     if (password.length < 6) {
       setError('Password must be at least 6 characters')
+      setLoading(false)
+      return
+    }
+
+    if (!zipCode.trim()) {
+      setError('Zip code is required')
       setLoading(false)
       return
     }
@@ -123,7 +153,7 @@ export default function SignupModal() {
             {/* Name Fields */}
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="firstName">First Name</label>
+                <label htmlFor="firstName">First Name <span className="required-asterisk">*</span></label>
                 <input
                   id="firstName"
                   type="text"
@@ -134,7 +164,7 @@ export default function SignupModal() {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="lastName">Last Name</label>
+                <label htmlFor="lastName">Last Name <span className="required-asterisk">*</span></label>
                 <input
                   id="lastName"
                   type="text"
@@ -148,7 +178,7 @@ export default function SignupModal() {
 
             {/* Email */}
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">Email <span className="required-asterisk">*</span></label>
               <input
                 id="email"
                 type="email"
@@ -162,7 +192,7 @@ export default function SignupModal() {
             {/* Password Fields */}
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="password">Password</label>
+                <label htmlFor="password">Password <span className="required-asterisk">*</span></label>
                 <input
                   id="password"
                   type="password"
@@ -173,7 +203,7 @@ export default function SignupModal() {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="confirmPassword">Confirm Password</label>
+                <label htmlFor="confirmPassword">Confirm Password <span className="required-asterisk">*</span></label>
                 <input
                   id="confirmPassword"
                   type="password"
@@ -188,7 +218,7 @@ export default function SignupModal() {
             {/* Phone & Zip */}
             <div className="form-row">
               <div className="form-group">
-                <label htmlFor="phone">Phone Number (Optional)</label>
+                <label htmlFor="phone">Phone Number <span className="text-muted">(Optional)</span></label>
                 <input
                   id="phone"
                   type="tel"
@@ -198,13 +228,14 @@ export default function SignupModal() {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="zip">Zip Code (Optional)</label>
+                <label htmlFor="zip">Zip Code <span className="required-asterisk">*</span></label>
                 <input
                   id="zip"
                   type="text"
                   value={zipCode}
                   onChange={(e) => setZipCode(e.target.value)}
                   placeholder="10001"
+                  required
                 />
               </div>
             </div>
