@@ -3,6 +3,31 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '@/lib/auth-context'
 
+// Password validation rules
+const PASSWORD_RULES = {
+  minLength: 6,
+  hasLowercase: /[a-z]/,
+  hasUppercase: /[A-Z]/,
+  hasDigit: /\d/,
+  hasSymbol: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/,
+}
+
+const validatePassword = (password: string) => {
+  const rules = {
+    minLength: password.length >= PASSWORD_RULES.minLength,
+    hasLowercase: PASSWORD_RULES.hasLowercase.test(password),
+    hasUppercase: PASSWORD_RULES.hasUppercase.test(password),
+    hasDigit: PASSWORD_RULES.hasDigit.test(password),
+    hasSymbol: PASSWORD_RULES.hasSymbol.test(password),
+  }
+  return rules
+}
+
+const isPasswordValid = (password: string) => {
+  const rules = validatePassword(password)
+  return Object.values(rules).every(Boolean)
+}
+
 export default function SignupModal() {
   const [isOpen, setIsOpen] = useState(false)
   const [firstName, setFirstName] = useState('')
@@ -18,6 +43,13 @@ export default function SignupModal() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [loading, setLoading] = useState(false)
+  const [passwordRules, setPasswordRules] = useState({
+    minLength: false,
+    hasLowercase: false,
+    hasUppercase: false,
+    hasDigit: false,
+    hasSymbol: false,
+  })
   const { signUp } = useAuth()
 
   useEffect(() => {
@@ -38,6 +70,12 @@ export default function SignupModal() {
       document.body.style.overflow = 'unset'
     }
   }, [isOpen])
+
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value
+    setPassword(newPassword)
+    setPasswordRules(validatePassword(newPassword))
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -76,8 +114,34 @@ export default function SignupModal() {
       return
     }
 
-    if (password.length < 6) {
+    // Validate password requirements
+    const rules = validatePassword(password)
+    if (!rules.minLength) {
       setError('Password must be at least 6 characters')
+      setLoading(false)
+      return
+    }
+
+    if (!rules.hasLowercase) {
+      setError('Password must contain lowercase letters')
+      setLoading(false)
+      return
+    }
+
+    if (!rules.hasUppercase) {
+      setError('Password must contain uppercase letters')
+      setLoading(false)
+      return
+    }
+
+    if (!rules.hasDigit) {
+      setError('Password must contain digits')
+      setLoading(false)
+      return
+    }
+
+    if (!rules.hasSymbol) {
+      setError('Password must contain special symbols (!@#$%^&* etc.)')
       setLoading(false)
       return
     }
@@ -197,10 +261,34 @@ export default function SignupModal() {
                   id="password"
                   type="password"
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={handlePasswordChange}
                   placeholder="••••••"
                   required
                 />
+                {password && (
+                  <div className="password-requirements">
+                    <div className={`requirement ${passwordRules.minLength ? 'met' : ''}`}>
+                      <span className="requirement-icon">{passwordRules.minLength ? '✓' : '○'}</span>
+                      At least 6 characters
+                    </div>
+                    <div className={`requirement ${passwordRules.hasLowercase ? 'met' : ''}`}>
+                      <span className="requirement-icon">{passwordRules.hasLowercase ? '✓' : '○'}</span>
+                      Lowercase letters (a-z)
+                    </div>
+                    <div className={`requirement ${passwordRules.hasUppercase ? 'met' : ''}`}>
+                      <span className="requirement-icon">{passwordRules.hasUppercase ? '✓' : '○'}</span>
+                      Uppercase letters (A-Z)
+                    </div>
+                    <div className={`requirement ${passwordRules.hasDigit ? 'met' : ''}`}>
+                      <span className="requirement-icon">{passwordRules.hasDigit ? '✓' : '○'}</span>
+                      Digits (0-9)
+                    </div>
+                    <div className={`requirement ${passwordRules.hasSymbol ? 'met' : ''}`}>
+                      <span className="requirement-icon">{passwordRules.hasSymbol ? '✓' : '○'}</span>
+                      Special symbols (!@#$%^&* etc.)
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="form-group">
                 <label htmlFor="confirmPassword">Confirm Password <span className="required-asterisk">*</span></label>

@@ -31,7 +31,7 @@ export default function Navbar() {
         {/* Left Side - Logo & Navigation Links */}
         <div className="nav-left">
           <a href="/" className="nav-logo">
-            <h1>Roll Over</h1>
+            <img src="/images/logo-items/Logo_rectangle_main_green.png" alt="Roll Over Kimbap" />
           </a>
           <ul className="nav-links">
             <li><a href="/">Home</a></li>

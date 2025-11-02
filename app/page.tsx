@@ -74,50 +74,61 @@ export default function Home() {
       {/* Service Section */}
       <section className="service-section">
         <div className="section-container">
-          <h2 className="section-title">Our Services</h2>
           <div className="service-content">
             <div className="service-text">
-              <p>
-                Roll Over Kimbap brings authentic Korean cuisine to Brooklyn.
-                Each kimbap roll is carefully crafted with fresh vegetables,
-                seasoned rice, and premium proteins.
+              <p className="body_medium">
+                Pickup Order
               </p>
               <p>
-                Our commitment to quality ingredients and traditional preparation
-                methods ensures every bite is delicious and satisfying.
+                Send us a DM by the day before with your order and pickup spot.
+                We'll be there with your favorite kimbap, freshly made that morning.
               </p>
             </div>
-            <div className="about-info">
-              <div className="info-item">
-                <h3>Address</h3>
-                <p>394 McGuinness Boulevard, Brooklyn, NY 11222</p>
-              </div>
-              <div className="info-item">
-                <h3>Hours</h3>
-                <p>Monday - Friday: 11am - 9pm</p>
-                <p>Saturday - Sunday: 10am - 10pm</p>
-              </div>
-              <div className="info-item">
-                <h3>Contact</h3>
-                <p>Phone: (631) 590-9330</p>
-              </div>
+            <div className="service-text">
+              <p className="body_medium">
+                Group Order
+              </p>
+              <p>
+                For order of 12 rolls or more, we take a limited number of delivery orders each day.
+                DM us early to secure your spot!
+              </p>
+            </div>
+            <div className="service-text">
+              <p className="body_medium">
+                Catering
+              </p>
+              <p>
+                Hosting a special day or gathering with friends?
+                We prepare kimbap and side dishes that pair perfectly together,
+                making your event both delicious and memorable.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="cta-section">
-        <div className="cta-content">
-          <h2>Ready to taste authentic kimbap?</h2>
-          <p>Order online or visit us at our Brooklyn location</p>
-          <div className="cta-buttons">
-            <Link href="/order-online" className="btn btn-primary">
-              Order Online
-            </Link>
-            <Link href="/contact" className="btn btn-secondary">
-              Get in Touch
-            </Link>
+      {/* Event Section */}
+      <section className="event-section">
+        <div className="section-container">
+          <h2>Events</h2>
+          <div className="events-list">
+            <div className="event-item">2025.11.14 Kimbap X Wine Society: Diner Classic Kimbap</div>
+            <div className="event-item">2025.11.07 Popup with Rockaway Brewing Company</div>
+            <div className="event-item">2025.10.25 Popup with Kato Sake Works</div>
+            <div className="event-item">2025.10.24 Popup with Rockaway Brewing Company</div>
+            <div className="event-item">2025.10.19 Jersey City Chuseok Festival</div>
+            <div className="event-item">2025.10.04 Popup with Rockaway Brewing Company</div>
+            <div className="event-item">2025.10.02-03 Popup with Hana Makgeolli</div>
+            <div className="event-item">2025.09.26 Kimbap X Wine Society: Reimaged Kimbap</div>
+            <div className="event-item">2025.09.19 Popup with Rockaway Brewing Company</div>
+            <div className="event-item">2025.09.14 Popup with King's Street Coffee</div>
+            <div className="event-item">2025.09.06 - 2025.10.18 Smorgasburg</div>
+            <div className="event-item">2025.08.22–23 Popup with Hana Makgeolli</div>
+            <div className="event-item">2025.08.10 Asian Festival</div>
+            <div className="event-item">2025.08.08 Popup with Rockaway Brewing Company</div>
+            <div className="event-item">2025.07.31 Popup with Hana Makgeolli</div>
+            <div className="event-item">2025.07.07 Kopino Festival</div>
+            <div className="event-item">2025.06.27 Popup with Rockaway Brewing Company</div>
           </div>
         </div>
       </section>

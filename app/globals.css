@@ -2257,6 +2257,49 @@ button.secondary:hover {
   font-size: 0.9rem;
 }
 
+/* Password Requirements */
+.password-requirements {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.requirement {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 500;
+}
+
+.requirement.met {
+  color: #155724;
+}
+
+.requirement-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.requirement.met .requirement-icon {
+  color: #28a745;
+}
+
+.requirement:not(.met) .requirement-icon {
+  color: #ccc;
+}
+
 /* 반응형 - 모바일 */
 @media (max-width: 480px) {
   .modal-overlay {
