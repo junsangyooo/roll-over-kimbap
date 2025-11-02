@@ -2,7 +2,7 @@
 'use client'
 
 import { createContext, useContext, useEffect, useState } from 'react'
-import { supabase } from './supabase'
+import { getSupabaseBrowserClient } from './supabase'
 
 type AuthContextType = {
   user: any
@@ -24,34 +24,54 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const getSession = async () => {
-      const { data } = await supabase.auth.getSession()
-      setUser(data.session?.user ?? null)
-      setLoading(false)
+    // 브라우저에서만 실행
+    const init = async () => {
+      try {
+        const supabase = getSupabaseBrowserClient()
+
+        const { data } = await supabase.auth.getSession()
+        setUser(data.session?.user ?? null)
+
+        const {
+          data: { subscription },
+        } = supabase.auth.onAuthStateChange((_event, session) => {
+          setUser(session?.user ?? null)
+        })
+
+        // cleanup
+        return () => {
+          subscription.unsubscribe()
+        }
+      } catch (err) {
+        console.error('Auth init failed:', err)
+        // env 없을 때도 UI는 뜨게
+        setUser(null)
+        setLoading(false)
+      } finally {
+        setLoading(false)
+      }
     }
 
-    getSession()
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-    })
-
-    return () => {
-      subscription.unsubscribe()
-    }
+    // 실행
+    init()
   }, [])
 
-  const signUp = async (email: string, password: string, metadata: Record<string, any> = {}) => {
+  const signUp = async (
+    email: string,
+    password: string,
+    metadata: Record<string, any> = {}
+  ) => {
+    const supabase = getSupabaseBrowserClient()
+
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: metadata, // ← this becomes raw_user_meta_data
-        emailRedirectTo: typeof window !== 'undefined'
-          ? `${window.location.origin}/auth/login`
-          : undefined,
+        data: metadata,
+        emailRedirectTo:
+          typeof window !== 'undefined'
+            ? `${window.location.origin}/auth/login`
+            : undefined,
       },
     })
 
@@ -61,6 +81,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signIn = async (email: string, password: string) => {
+    const supabase = getSupabaseBrowserClient()
     const { error } = await supabase.auth.signInWithPassword({ email, password })
     if (error) {
       throw new Error(error.message)
@@ -68,6 +89,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signOut = async () => {
+    const supabase = getSupabaseBrowserClient()
     const { error } = await supabase.auth.signOut()
     if (error) {
       throw new Error(error.message)
@@ -75,12 +97,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   const signInWithGoogle = async () => {
+    const supabase = getSupabaseBrowserClient()
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
-        redirectTo: typeof window !== 'undefined'
-          ? `${window.location.origin}/auth/callback`
-          : undefined,
+        redirectTo:
+          typeof window !== 'undefined'
+            ? `${window.location.origin}/auth/callback`
+            : undefined,
       },
     })
     if (error) {

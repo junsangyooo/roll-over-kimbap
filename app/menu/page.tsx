@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
+import { getSupabaseBrowserClient } from '@/lib/supabase'
 import { getTagIcon } from '@/lib/iconUtils'
 
 interface MenuItem {
@@ -11,7 +11,7 @@ interface MenuItem {
   price: number
   category: string
   image_url?: string
-  tags?: string[] // DB에서 jsonb 로 올 거면 여기 나중에 타입 한 번 더 확인
+  tags?: string[]
 }
 
 export default function Menu() {
@@ -22,15 +22,9 @@ export default function Menu() {
 
   useEffect(() => {
     const fetchMenuItems = async () => {
-      // 💡 supabase가 null이면 바로 종료
-      if (!supabase) {
-        console.error('Supabase client is not initialized.')
-        setFetchError('Menu service is temporarily unavailable.')
-        setLoading(false)
-        return
-      }
-
       try {
+        const supabase = getSupabaseBrowserClient()
+
         const { data, error } = await supabase
           .from('menu_items')
           .select('*')
@@ -40,10 +34,10 @@ export default function Menu() {
 
         setMenuItems(data || [])
 
-        // extract unique categories
         const uniqueCategories = Array.from(
           new Set((data || []).map((item) => item.category))
         ) as string[]
+
         setCategories(uniqueCategories)
       } catch (err) {
         console.error('Failed to fetch menu items:', err)
@@ -58,14 +52,12 @@ export default function Menu() {
 
   return (
     <div className="menu-page">
-      {/* Page Header */}
       <div className="section-container">
         <section className="menu-header">
           <h1>Menu</h1>
         </section>
       </div>
 
-      {/* Menu Content */}
       <section className="menu-content">
         {loading ? (
           <div className="loading">Loading menu...</div>
@@ -95,9 +87,7 @@ export default function Menu() {
                             )}
                             <div className="menu-card-content">
                               <div className="menu-card-header">
-                                <h3 className="menu-card-title">
-                                  {item.name}
-                                </h3>
+                                <h3 className="menu-card-title">{item.name}</h3>
                                 <p className="menu-card-price">
                                   ${item.price.toFixed(2)}
                                 </p>
@@ -135,22 +125,6 @@ export default function Menu() {
         ) : (
           <div className="no-items">No menu items available.</div>
         )}
-      </section>
-
-      {/* Info Section */}
-      <section className="menu-info">
-        <div className="section-container">
-          <h2>Ready to Order?</h2>
-          <p>Visit us or order online for pickup or delivery</p>
-          <div className="info-buttons">
-            <a href="/order-online" className="btn btn-primary">
-              Order Online
-            </a>
-            <a href="/contact" className="btn btn-secondary">
-              Contact Us
-            </a>
-          </div>
-        </div>
       </section>
     </div>
   )

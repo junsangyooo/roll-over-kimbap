@@ -1,20 +1,29 @@
-// lib/supabase.ts
+// /lib/supabase.ts
 import { createClient, SupabaseClient } from '@supabase/supabase-js'
 
-const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
-let supabase: SupabaseClient | null = null
+// 브라우저에서만 재사용할 인스턴스
+let browserClient: SupabaseClient | null = null
 
-if (url && anonKey) {
-  supabase = createClient(url, anonKey)
-} else {
-  // 빌드/서버 환경에서 env가 없을 때 여기로 온다
+// 브라우저에서만 호출해라
+export function getSupabaseBrowserClient(): SupabaseClient {
   if (typeof window === 'undefined') {
-    console.warn(
-      'Supabase env vars are missing. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in Vercel.'
+    // 서버/빌드에서는 여기 들어오면 안 된다
+    throw new Error('getSupabaseBrowserClient must be called in the browser')
+  }
+
+  if (!supabaseUrl || !supabaseAnonKey) {
+    // 브라우저인데도 env가 없다 → Vercel에 env 안 넣은 상황
+    throw new Error(
+      'Missing Supabase env. Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY.'
     )
   }
-}
 
-export { supabase }
+  if (!browserClient) {
+    browserClient = createClient(supabaseUrl, supabaseAnonKey)
+  }
+
+  return browserClient
+}
