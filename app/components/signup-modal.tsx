@@ -158,12 +158,6 @@ export default function SignupModal() {
       return
     }
 
-    if (!zipCode.trim()) {
-      setError('Zip code is required')
-      setLoading(false)
-      return
-    }
-
     if (!termsAgreed) {
       setError('You must agree to the terms and conditions')
       setLoading(false)
@@ -171,16 +165,24 @@ export default function SignupModal() {
     }
 
     try {
-      await signUp(email, password, {
+      const metadata: Record<string, any> = {
         firstName,
         lastName,
         email,
-        phoneNumber,
-        zipCode,
         emailSubscribe,
         smsSubscribe,
         termsAgreed,
-      })
+      }
+
+      // Only add optional fields if provided
+      if (phoneNumber.trim()) {
+        metadata.phoneNumber = phoneNumber
+      }
+      if (zipCode.trim()) {
+        metadata.zipCode = zipCode
+      }
+
+      await signUp(email, password, metadata)
       setSuccess('Account created successfully! Please check your email to confirm your account.')
       setTimeout(() => {
         setIsOpen(false)
@@ -344,14 +346,13 @@ export default function SignupModal() {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="zip">Zip Code <span className="required-asterisk">*</span></label>
+                <label htmlFor="zip">Zip Code <span className="text-muted">(Optional)</span></label>
                 <input
                   id="zip"
                   type="text"
                   value={zipCode}
                   onChange={(e) => setZipCode(e.target.value)}
                   placeholder="10001"
-                  required
                 />
               </div>
             </div>

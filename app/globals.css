@@ -2348,6 +2348,98 @@ button.secondary:hover {
   box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
 }
 
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+/* Profile Modal & Icon Styles */
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+
+.nav-profile-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  transition: all 0.3s ease;
+  border-radius: 4px;
+}
+
+.nav-profile-button:hover {
+  color: var(--primary);
+  background-color: rgba(19, 56, 31, 0.1);
+}
+
+.nav-profile-button svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 2;
+}
+
+/* Profile Modal Content */
+.profile-content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.profile-section h3 {
+  font-size: 1.2rem;
+  color: var(--primary);
+  margin: 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #eee;
+}
+
+.profile-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.profile-field label {
+  font-weight: 600;
+  color: var(--primary);
+  font-size: 0.9rem;
+}
+
+.profile-field p {
+  color: #555;
+  margin: 0;
+  font-size: 0.95rem;
+  padding: 0.5rem 0;
+}
+
+.logout-button {
+  background-color: var(--accent);
+  color: white;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.logout-button:hover:not(:disabled) {
+  background-color: #e55a0f;
+  transform: translateY(-2px);
+}
+
+.logout-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
 /* 반응형 - 모바일 */
 @media (max-width: 480px) {
   .modal-overlay {
@@ -2372,5 +2464,13 @@ button.secondary:hover {
 
   .modal-footer {
     padding: 1rem 1.5rem;
+  }
+
+  .profile-content {
+    padding: 1.5rem;
+  }
+
+  .profile-section h3 {
+    font-size: 1rem;
   }
 }

@@ -4,6 +4,7 @@ import { AuthProvider } from "@/lib/auth-context";
 import Navbar from "@/app/components/navbar";
 import LoginModal from "@/app/components/login-modal";
 import SignupModal from "@/app/components/signup-modal";
+import ProfileModal from "@/app/components/profile-modal";
 import Footer from "@/app/components/footer";
 import "./globals.css";
 
@@ -30,6 +31,7 @@ export default function RootLayout({
           <Navbar />
           <LoginModal />
           <SignupModal />
+          <ProfileModal />
 
           <main>{children}</main>
 
