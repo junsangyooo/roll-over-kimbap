@@ -50,6 +50,7 @@ export default function SignupModal() {
     hasDigit: false,
     hasSymbol: false,
   })
+  const [passwordsMatch, setPasswordsMatch] = useState(true)
   const { signUp } = useAuth()
 
   useEffect(() => {
@@ -75,6 +76,17 @@ export default function SignupModal() {
     const newPassword = e.target.value
     setPassword(newPassword)
     setPasswordRules(validatePassword(newPassword))
+    // Check if confirm password matches
+    if (confirmPassword) {
+      setPasswordsMatch(newPassword === confirmPassword)
+    }
+  }
+
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newConfirmPassword = e.target.value
+    setConfirmPassword(newConfirmPassword)
+    // Check if passwords match in real-time
+    setPasswordsMatch(password === newConfirmPassword)
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -296,10 +308,17 @@ export default function SignupModal() {
                   id="confirmPassword"
                   type="password"
                   value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  onChange={handleConfirmPasswordChange}
                   placeholder="••••••"
                   required
+                  className={confirmPassword && !passwordsMatch ? 'input-error' : ''}
                 />
+                {confirmPassword && (
+                  <div className={`password-match ${passwordsMatch ? 'matched' : 'not-matched'}`}>
+                    <span className="match-icon">{passwordsMatch ? '✓' : '✗'}</span>
+                    {passwordsMatch ? 'Passwords match' : 'Passwords do not match'}
+                  </div>
+                )}
               </div>
             </div>
 
