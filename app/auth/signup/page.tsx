@@ -36,7 +36,15 @@ export default function SignUp() {
         throw new Error('비밀번호가 일치하지 않습니다.')
       }
 
-      await signUp(email, password)
+      await signUp(email, password, {
+        firstName: 'User',
+        lastName: 'Account',
+        email,
+        zipCode: '00000',
+        emailSubscribe: false,
+        smsSubscribe: false,
+        termsAgreed: true,
+      })
       setSuccess(true)
 
       // 3초 후 로그인 페이지로 이동

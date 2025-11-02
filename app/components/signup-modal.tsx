@@ -171,8 +171,17 @@ export default function SignupModal() {
     }
 
     try {
-      await signUp(email, password)
-      setSuccess('Account created successfully! Please log in.')
+      await signUp(email, password, {
+        firstName,
+        lastName,
+        email,
+        phoneNumber,
+        zipCode,
+        emailSubscribe,
+        smsSubscribe,
+        termsAgreed,
+      })
+      setSuccess('Account created successfully! Please check your email to confirm your account.')
       setTimeout(() => {
         setIsOpen(false)
         // Reset form
@@ -187,7 +196,7 @@ export default function SignupModal() {
         setSmsSubscribe(false)
         setTermsAgreed(false)
         setSuccess('')
-      }, 2000)
+      }, 3000)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign up failed')
     } finally {
